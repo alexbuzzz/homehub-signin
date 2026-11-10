@@ -23,7 +23,7 @@
   h1 { font-size: 22px; margin: 0 0 8px; }
   p { margin: 8px 0; color: #3b3b40; }
   .muted { color: #6e6e75; font-size: 14px; }
-  #qr { margin: 18px auto 8px; width: min(78vw, 340px); aspect-ratio: 1; background: #fff; }
+  #qr { margin: 14px auto 8px; width: min(84vw, 400px); aspect-ratio: 1; background: #fff; }
   #qr svg, #qr img { width: 100%; height: 100%; display: block; }
   .bad { color: #c4302b; font-weight: 600; }
 </style>
@@ -54,13 +54,14 @@
   // 2. back from Google: the code as a QR for the tablet
   if (q.get('code') && q.get('state')) {
     var payload = 'HHG1 ' + q.get('state') + ' ' + q.get('code');
-    var qr = qrcode(0, 'M');
+    // the lowest error correction gives the fewest, biggest squares — easier for a fixed-focus camera 30–40 cm away
+    var qr = qrcode(0, 'L');
     qr.addData(payload);
     qr.make();
-    $('qr').innerHTML = qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+    $('qr').innerHTML = qr.createSvgTag({ cellSize: 8, margin: 4, scalable: true });
     $('qr').hidden = false;
-    say('Almost done', 'Hold this screen up to the tablet’s camera, above its screen, about a hand’s width away.');
-    $('hint').textContent = 'Turn the phone’s brightness up if the tablet doesn’t see it. You can close this page afterwards.';
+    say('Almost done', 'Hold this screen facing the tablet’s camera (above its screen), 30–40 cm away, and keep it still for a moment.');
+    $('hint').textContent = 'Turn the phone’s brightness up. Too close looks blurry to the tablet — move back a little if nothing happens. You can close this page afterwards.';
     $('hint').hidden = false;
     // the code is not left in the address bar or history
     history.replaceState(null, '', here);
